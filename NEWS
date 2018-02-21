@@ -1,0 +1,11 @@
+News in version 0.8
+  * first list: validated interactions and second list: validated non interactions
+
+... [not recorded] ...
+
+News in version 0.3
+  * bug: unspecified edges are no more associated with a negative constraint
+  * out-of-bag estimate of the mse
+
+News in version 0.2
+  * added a bootstrap inference

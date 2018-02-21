@@ -1,0 +1,40 @@
+---
+output: 
+  github_document: default
+  html_document:
+    self_contained: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = TRUE)
+```
+
+## Scripts
+
+This repository contains the scripts implementing for the network inference 
+method of the article (Marti-Marimon *et al*, 2018). It can be installed with:
+```{r install, eval=FALSE}
+devtools::install_github("tuxette/internet3D")
+```
+The main functions of the package are `build.network` and `bootstrap.build`.
+
+
+## Supplementary files
+
+After installation, supplementary files with the different networks described 
+in the article are in:
+```{r networksLoc, eval=FALSE}
+system.file("results/network0.graphml", package = "internet3D")
+```
+(and similarly for `network1`, `network2` and `network3`). They can be loaded 
+within **R** with 
+```{r networksImport, message=FALSE}
+library(igraph)
+net0 <- system.file("results/network0.graphml", package = "internet3D")
+net0 <- read_graph(net0, format = "graphml")
+net0
+```
+
+The files are also directly accessible in this repository in `inst/results` and
+can be read with any standard tool for graph visualization (*e.g.*, Gephi,
+https://gephi.org/)
