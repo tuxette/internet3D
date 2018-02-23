@@ -1,13 +1,13 @@
 Package: internet3D
 Type: Package
 Title: gamma-package for internet3D
-Version: 0.8
+Version: 0.8.1
 Date: 2016-10-31
 Authors@R: c(
   person("Nathalie", "Villa-Vialaneix", , "nathalie.villa-vialaneix@inra.fr", c("aut", "cre")),
-  person("Valentin", "Voillet", "valentin.voillet@gmail.Com", c("ctb")))
+  person("Valentin", "Voillet", , "valentin.voillet@gmail.Com", c("ctb")))
 Maintainer: Nathalie Villa-Vialaneix <nathalie.villa-vialaneix@inra.fr>
 Description: This package is a package for constrained network inference
-Depends: doMC
+Suggests: doMC, foreach
 License: GPL (>= 2)
 RoxygenNote: 6.0.1

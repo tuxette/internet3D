@@ -38,3 +38,11 @@ net0
 The files are also directly accessible in this repository in `inst/results` and
 can be read with any standard tool for graph visualization (*e.g.*, Gephi,
 https://gephi.org/)
+
+
+## Reference
+
+Marti-Marimon M., Villa-Vialaneix N., Voillet V., Yerle-Bouissou M., 
+Lahbib-Mansais Y., Liaubet L. (2018) A new approach of gene co-expression
+network inference reveals significant biological processes involved in porcine 
+muscle development in late gestation. *Preprint*

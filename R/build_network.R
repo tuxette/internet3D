@@ -1,7 +1,41 @@
 ##### This file is the main file of therese
-# it contains the function that allows you to infer networks
+# it contains the function for network inference
 # it is widely inspired from the code of Julien Chiquet's R package 'simone'
 
+#' Perform network inference.
+#'
+#' @param expr a n by d data matrix
+#' @param ... options passed to the function \code{\link{set.options}}
+#' @return object of type \code{internet3D} with the following entries 
+#' \itemize{
+#' \item{\code{expr} input expression dataset}
+#' \item{\code{networks} networks infered along the regularization path}
+#' \item{\code{used.lambdas} penalization parameters used along the 
+#' regularization path}
+#' \item{\code{n.edges} number of edges of networks along the regularization 
+#' path}
+#' \item{\code{BIC} BIC criteria (experimental) along the regularization path}
+#' \item{\code{AIC} AIC criteria (experimental) along the regularization path}
+#' \item{\code{loglik} log-likelihoods along the regularization path}
+#' \item{\code{loglik.pen} penalized log-likelihoods along the regularization 
+#' path}
+#' \item{\code{options} \code{internet3DOptions} object with the options used 
+#' for the inference}
+#' }
+#' @seealso \code{\link{set.options}} and \code{\link{bootstrap.build}}
+#' @export
+#' @examples
+#' data(cancer)
+#' # no constraint
+#' res <- build.network(expr)
+#' # constraints
+#' res <- build.network(expr, 
+#'                      first.list=matrix(c("AMFR","BTG3","BECNI","BTG3"),
+#'                                        ncol=2, byrow=TRUE),
+#'                      second.list=matrix(c("AMFR","E2F3"), ncol=2),
+#'                      mu=1)
+#' print(res)
+#' 
 build.network <- function(expr, ...) {
   # Initialize options
   args <- list(...)
@@ -113,11 +147,20 @@ build.network <- function(expr, ...) {
 }
 
 ##### S3 method for 'internet3D'
+
+#' @rdname build.network
+#' @param x a \code{internet3D} object
+#' @export
+#' 
 print.internet3D <- function(x,...) {
   cat("Internet3D object inferred for", ncol(x$data), "variables observed for",
       nrow(x$data), "individuals.\n\n")
 }
 
+#' @rdname build.network
+#' @param object a \code{internet3D} object
+#' @export
+#' 
 summary.internet3D <- function(object,...) {
   cat("Internet3D object inferred for", ncol(object$data),
       "variables observed for", nrow(object$data), "individuals.\n\n")
@@ -128,25 +171,13 @@ summary.internet3D <- function(object,...) {
   cat("\n***** Results obtained by Internet3D\n\n")
   cat("    Best BIC for network number", which.min(object$BIC), "with",
       object$n.edges[which.min(object$BIC),],"edges (densities:",
-      format(2*object$n.edges[which.min(object$BIC),]/p/(p-1),digits=2), ").\n")
+      format(2*object$n.edges[which.min(object$BIC),]/p/(p-1),digits=2),").\n")
   cat("    Best AIC for network number", which.min(object$AIC), "with",
       object$n.edges[which.min(object$AIC),],"edges (densities:",
-      format(2*object$n.edges[which.min(object$AIC),]/p/(p-1),digits=2), ").\n")
+      format(2*object$n.edges[which.min(object$AIC),]/p/(p-1),digits=2),").\n")
   cat("    Best penalized log-likelihood for network number",
       which.max(object$loglik.pen), "with",
-      object$n.edges[which.max(object$loglik.pen),], "edges. (densities:",
+      object$n.edges[which.max(object$loglik.pen),], "edges (densities:",
       format(2*object$n.edges[which.max(object$loglik.pen),]/p/(p-1), digits=2),
       ").\n")
 }
-
-## Tests
-# data(cancer)
-# # no constraint
-# res <- build.network(expr)
-# # constraints
-# res <- build.network(expr, 
-#                      first.list=matrix(c("AMFR","BTG3","BECNI","BTG3"),
-#                                        ncol=2, byrow=TRUE),
-#                      second.list=matrix(c("AMFR","E2F3"), ncol=2),
-#                      mu=1, r.mu=2)
-# print(res)

@@ -62,6 +62,41 @@ train.oneboot <- function(expr, nkeep1, args) {
   return(list("edges" = kept.res, "mse" = mse, "mse_mu" = mse_mu))
 }
 
+#' Perform network inference with bootstrap approach.
+#'
+#' @param expr a n by d data matrix
+#' @param nboot number of bootstrap samples
+#' @param nkeep1 number of edges to keep from each infered network
+#' @param nkeep2 minimum number of times an edge has to be predicted to be 
+#' kept in the final network
+#' @param parallel should the function be run in parallel (unix-like systems
+#' only)
+#' @param ncores number of cores for parallel executions
+#' @param seeds vector of \code{nboot} seeds to control randomness in network 
+#' inference based on bootstraps
+#' @param ... options passed to the function \code{\link{set.options}}
+#' @return object with the following entries
+#' \itemize{
+#' \item{\code{edges} final infered network}
+#' \item{\code{mse} total OOB mean square error}
+#' \item{\code{adjacency} total adjacency matrix combined from the \code{nboot}
+#' infered network}
+#' \item{\code{stars} StaRs criterion}
+#' \item{\code{stability} stability criterion}
+#' }
+#' @export
+#' @examples
+#' data(cancer)
+#' # no constraint
+#' res <- bootstrap.build(expr, nboot=3, nkeep1=10, nkeep2=1)
+#' # constraints
+#' res <- bootstrap.build(expr, nboot=3, nkeep1=10, nkeep2=1,
+#'                        first.list=matrix(c("AMFR","BB_S4","BECNI","BTG3"),
+#'                                          ncol=2, byrow=TRUE),
+#'                        second.list=matrix(c("AMFR","E2F3"), ncol=2),
+#'                        mu=1)
+#' print(res)
+
 bootstrap.build <- function(expr, nboot=10, nkeep1=round(0.1*nrow(expr)^2/2),
                             nkeep2=round(0.5*nboot), parallel=FALSE, ncores=10,
                             seeds = NULL, ...) {
@@ -71,9 +106,11 @@ bootstrap.build <- function(expr, nboot=10, nkeep1=round(0.1*nrow(expr)^2/2),
   if (is.null(args$verbose)) args$verbose <- FALSE
   
   if (parallel) {
-    registerDoMC(cores=ncores)
+    if (!requireNamespace(doMC))
+      stop("'doMC' not installed. Inference cannot be performed in parallel.")
+    doMC::registerDoMC(cores=ncores)
     
-    res <- foreach(rep=1:nboot) %dopar% {
+    res <- foreach::foreach(rep=1:nboot) %dopar% {
       if (!is.null(seeds)) set.seed(seeds[rep])
       stability <- 0
       cat("bootstrap sample ", rep, "\n")
@@ -115,14 +152,3 @@ bootstrap.build <- function(expr, nboot=10, nkeep1=round(0.1*nrow(expr)^2/2),
   return(list("edges" = final.res, "mse" = total.mse, 'adjacency'=total.res,
               "stars" = instability, "stability" = stability))
 }
-
-# data(cancer)
-# # no constraint
-# res <- bootstrap.build(expr, nboot=3, nkeep2=1)
-# # constraints
-# res <- bootstrap.build(expr, nboot=3, nkeep2=1,
-#                        first.list=matrix(c("AMFR","BB_S4","BECNI","BTG3"),
-#                                          ncol=2, byrow=TRUE),
-#                        second.list=matrix(c("AMFR","E2F3"), ncol=2),
-#                        mu=1, r.mu=2)
-# print(res)

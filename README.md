@@ -28,9 +28,9 @@ net0 <- read_graph(net0, format = "graphml")
 net0
 ```
 
-    ## IGRAPH daa1f89 UN-- 359 2279 -- 
+    ## IGRAPH 99d2136 UN-- 359 2279 -- 
     ## + attr: name (v/c), id (v/c)
-    ## + edges from daa1f89 (vertex names):
+    ## + edges from 99d2136 (vertex names):
     ##  [1] ABCB7 --ADAMTSL3 ABCB7 --CEND1    ABCB7 --COQ7     ABCB7 --FABP3   
     ##  [5] ABCB7 --HMGB2    ABCB7 --MGST3    ABCB7 --MITF     ABCB7 --P2RX5   
     ##  [9] ABCB7 --PTMA     ABCB7 --RAB3A    ABCB7 --RBM10    ABCB7 --SELO    
@@ -42,3 +42,8 @@ net0
     ## + ... omitted several edges
 
 The files are also directly accessible in this repository in `inst/results` and can be read with any standard tool for graph visualization (*e.g.*, Gephi, <https://gephi.org/>)
+
+Reference
+---------
+
+Marti-Marimon M., Villa-Vialaneix N., Voillet V., Yerle-Bouissou M., Lahbib-Mansais Y., Liaubet L. (2018) A new approach of gene co-expression network inference reveals significant biological processes involved in porcine muscle development in late gestation. *Preprint*
